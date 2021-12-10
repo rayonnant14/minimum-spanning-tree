@@ -5,21 +5,30 @@
 #include <iostream>
 #include "stdlib.h"
 #include <vector>
+
 using namespace std;
 
 class Set{
 public:
     Set(const size_t set_size);
+    Set(){};
+    void init(const size_t set_size);
+    void create(const size_t x);
+    void merge(const size_t x, const size_t y);
+    size_t find(size_t x);
 protected:
     vector<size_t> p;
     vector<size_t> r;
-    void create(const size_t x);
-    void merge(const size_t x, const size_t y);
-    size_t search(size_t x);
-
 };
 
 Set::Set(const size_t set_size) {
+    p.resize(set_size, 0);
+    r.resize(set_size, 0);
+//    for (size_t i = 0; i < set_size; i++)
+//        create(i);
+}
+
+void Set::init(const size_t set_size) {
     p.resize(set_size, 0);
     r.resize(set_size, 0);
     for (size_t i = 0; i < set_size; i++)
@@ -46,7 +55,7 @@ void Set::merge(const size_t x, const size_t y) {
     return;
 }
 
-size_t Set::search(size_t x) {
+size_t Set::find(size_t x) {
     size_t z = x;
     while (p[x] != x) {
         x = p[x];

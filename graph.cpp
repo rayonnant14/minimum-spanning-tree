@@ -12,19 +12,32 @@ static std::mt19937 gen(rd());
 
 class Graph {
 public:
-    Graph(const vector<vector<int> >& adj_matrix_);
+    Graph(const vector<vector<int> >& adj_matrix_, const size_t edges_num_);
     Graph(const int nodes_num, const double density);
+    Graph(){};
     void print_graph() const;
+    size_t get_nodes_num() const {
+        return nodes_num;
+    }
+    size_t get_edges_num() const {
+        return edges_num;
+    }
+    vector<vector<int> > get_adj_matrix() const {
+        return adj_matrix;
+    }
+
 protected:
     void generate_random_graph(const double density);
 private:
     vector<vector<int> > adj_matrix;
-    size_t nodes_num;
+    size_t nodes_num = 0;
+    size_t edges_num = 0;
 };
 
-Graph::Graph(const vector<vector<int> >& adj_matrix_) {
+Graph::Graph(const vector<vector<int> >& adj_matrix_, const size_t edges_num_) {
     adj_matrix = adj_matrix_;
     nodes_num = adj_matrix_.size();
+    edges_num = edges_num_;
 }
 
 Graph::Graph(const int nodes_num_, const double density) {
@@ -45,6 +58,7 @@ void Graph::generate_random_graph(const double density) {
             }
             int weight = int(gen() % 100);
             if (pd(gen)) {
+                edges_num++;
                 adj_matrix[i][j] = weight;
                 adj_matrix[j][i] = weight;
             }

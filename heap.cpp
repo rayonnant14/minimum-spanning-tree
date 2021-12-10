@@ -11,7 +11,7 @@ using namespace std;
 template<typename T>
 class Heap {
 protected:
-    vector<T> keys;
+    vector<std::pair<std::pair<size_t, size_t>, T> > keys;
     size_t d;
     size_t n;
     void tr(const size_t i, const size_t j);
@@ -19,21 +19,36 @@ protected:
     void emersion(size_t i);
     void diving(size_t i);
 public:
-    Heap(const vector<T>& keys_, const size_t d);
+    Heap(const vector<std::pair<std::pair<size_t, size_t>, T> >& keys_, const size_t d_);
+    Heap(){};
+    void init(const vector<std::pair<std::pair<size_t, size_t>, T> >& keys_, const size_t d_);
     void print_heap() const {
         for(size_t i = 0; i < n; i++)
-            std::cout << keys[i] << " ";
+            std::cout << keys[i].second << " ";
         std::cout << std::endl;
     }
     size_t find_min_child(size_t i) const;
-    void insert_key(T key);
+    void insert_key(std::pair<std::pair<size_t, size_t>, T> key);
     void delete_key(size_t i);
-    T find_min() const;
+    std::pair<std::pair<size_t, size_t>, T> find_min() const;
     void delete_min();
+    size_t get_size() const {
+        return n;
+    }
 };
 
 template<typename T>
-Heap<T>::Heap(const vector<T>& keys_, const size_t d_) {
+Heap<T>:: Heap(const vector<std::pair<std::pair<size_t, size_t>, T> >& keys_,
+               const size_t d_) {
+    keys = keys_;
+    d = d_;
+    n = keys.size();
+    make_heap();
+}
+
+template<typename T>
+void Heap<T>::init(const vector<std::pair<std::pair<size_t, size_t>, T> >& keys_,
+                   const size_t d_) {
     keys = keys_;
     d = d_;
     n = keys.size();
@@ -49,7 +64,7 @@ template<typename T>
 void Heap<T>::emersion(size_t i) {
     while (i > 0){
         size_t parent = div(int(i - 1), int(d)).quot;
-        if (keys[parent] > keys[i]){
+        if (keys[parent].second > keys[i].second){
             tr(i, parent);
             i = parent;
         }
@@ -70,8 +85,8 @@ size_t Heap<T>::find_min_child(size_t i) const {
         last = n - 1;
     T min_key = std::numeric_limits<T>::max();
     for (int j = first; j <= last; j++){
-        if (keys[j] < min_key) {
-            min_key = keys[j];
+        if (keys[j].second < min_key) {
+            min_key = keys[j].second;
             min_child = j;
         }
     }
@@ -84,7 +99,7 @@ void Heap<T>::diving(size_t i) {
         size_t j = find_min_child(i);
         if (j == 0)
             return;
-        if (keys[i] > keys[j]) {
+        if (keys[i].second > keys[j].second) {
             tr(i, j);
             i = j;
         } else
@@ -93,7 +108,7 @@ void Heap<T>::diving(size_t i) {
 }
 
 template<typename T>
-void Heap<T>::insert_key(T key) {
+void Heap<T>::insert_key(std::pair<std::pair<size_t, size_t>, T> key) {
     keys.push_back(key);
     emersion(n);
     n += 1;
@@ -105,7 +120,8 @@ void Heap<T>::delete_key(size_t i) {
     keys[i] = keys[n -1];
     keys.resize(n - 1);
     n = n - 1;
-    if ((i != 0) && (keys[i] < keys[div(int(i - 1), int(d)).quot]))
+    if ((i != 0) &&
+        (keys[i].second < keys[div(int(i - 1), int(d)).quot].second))
         emersion(i);
     else
         diving(i);
@@ -113,10 +129,11 @@ void Heap<T>::delete_key(size_t i) {
 }
 
 template<typename T>
-T Heap<T>::find_min() const {
+std::pair<std::pair<size_t, size_t>, T> Heap<T>::find_min() const {
     if (n > 0)
         return keys[0];
-    else return std::numeric_limits<T>::max();
+    else return std::make_pair(std::make_pair(0, 0), 0);
+//    else return std::numeric_limits<T>::max();
 }
 
 template<typename T>
