@@ -5,12 +5,13 @@
 #include <vector>
 #include <random>
 
+template<typename T>
 class Kruskal {
 public:
     Kruskal(const Graph& G_);
     void spanning_tree_search();
     void print_min_spanning_tree_edges() const {
-        size_t weight = 0;
+        T weight = 0;
         for(auto edge:min_spanning_tree_edges)
         {
 //            std::cout << "edge (" << edge.first.first << ", " << edge.first.second
@@ -23,19 +24,21 @@ protected:
     Graph G;
     Set S;
     Heap<int> heap;
-    std::vector<std::pair<std::pair<size_t, size_t>, int> > edges;
+    std::vector<std::pair<std::pair<size_t, size_t>, T> > edges;
     void create_edges_from_adj_matrix(const Graph& G);
-    std::vector<std::pair<std::pair<size_t, size_t>, int> > min_spanning_tree_edges;
+    std::vector<std::pair<std::pair<size_t, size_t>, T> > min_spanning_tree_edges;
 };
 
-Kruskal::Kruskal(const Graph& G_) {
+template<typename T>
+Kruskal<T>::Kruskal(const Graph& G_) {
     G = G_;
     S.init(G.get_nodes_num());
     create_edges_from_adj_matrix(G);
 }
 
-void Kruskal::create_edges_from_adj_matrix(const Graph& G) {
-    vector<vector<int> > adj_matrix = G.get_adj_matrix();
+template<typename T>
+void Kruskal<T>::create_edges_from_adj_matrix(const Graph& G) {
+    vector<vector<T> > adj_matrix = G.get_adj_matrix();
     for (size_t i = 0; i < G.get_nodes_num(); i++)
         for (size_t j = i + 1; j < G.get_nodes_num(); j++) {
             if (adj_matrix[i][j] != -1)
@@ -43,10 +46,11 @@ void Kruskal::create_edges_from_adj_matrix(const Graph& G) {
         }
 }
 
-void Kruskal::spanning_tree_search() {
+template<typename T>
+void Kruskal<T>::spanning_tree_search() {
     heap.init(edges, 2);
     do {
-        std::pair<std::pair<size_t, size_t>, int> min_edge = heap.find_min();
+        std::pair<std::pair<size_t, size_t>, T> min_edge = heap.find_min();
         heap.delete_min();
         size_t x = S.find(min_edge.first.first);
         size_t y = S.find(min_edge.first.second);

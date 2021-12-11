@@ -145,7 +145,6 @@ std::pair<std::pair<size_t, size_t>, T> Heap<T>::find_min() const {
     if (n > 0)
         return keys[0];
     else return std::make_pair(std::make_pair(0, 0), 0);
-//    else return std::numeric_limits<T>::max();
 }
 
 template<typename T>
