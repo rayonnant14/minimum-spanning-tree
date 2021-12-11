@@ -25,6 +25,7 @@ public:
     vector<vector<int> > get_adj_matrix() const {
         return adj_matrix;
     }
+    int operator()(const size_t i, const size_t j);
 
 protected:
     void generate_random_graph(const double density);
@@ -56,7 +57,7 @@ void Graph::generate_random_graph(const double density) {
                 adj_matrix[i][j] = -1;
                 continue;
             }
-            int weight = int(gen() % 100);
+            int weight = int(1 + gen() % 100);
             if (pd(gen)) {
                 edges_num++;
                 adj_matrix[i][j] = weight;
@@ -78,4 +79,8 @@ void Graph::print_graph() const {
         std::cout << std::endl;
     }
     return;
+}
+
+int Graph::operator()(const size_t i, const size_t j) {
+    return adj_matrix[i][j];
 }

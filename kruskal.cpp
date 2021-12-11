@@ -4,20 +4,20 @@
 #include <iostream>
 #include <vector>
 #include <random>
-#include "graph.cpp"
-#include "set.cpp"
-#include "heap.cpp"
 
 class Kruskal {
 public:
     Kruskal(const Graph& G_);
     void spanning_tree_search();
     void print_min_spanning_tree_edges() const {
+        size_t weight = 0;
         for(auto edge:min_spanning_tree_edges)
         {
-            std::cout << "edge (" << edge.first.first << ", " << edge.first.second
-                      << "), weight " << edge.second << std::endl;
+//            std::cout << "edge (" << edge.first.first << ", " << edge.first.second
+//                      << "), weight " << edge.second << std::endl;
+            weight += edge.second;
         }
+        std::cout << "Total tree weight " << weight << std::endl;
     }
 protected:
     Graph G;
@@ -32,7 +32,6 @@ Kruskal::Kruskal(const Graph& G_) {
     G = G_;
     S.init(G.get_nodes_num());
     create_edges_from_adj_matrix(G);
-    heap.init(edges, 2);
 }
 
 void Kruskal::create_edges_from_adj_matrix(const Graph& G) {
@@ -45,6 +44,7 @@ void Kruskal::create_edges_from_adj_matrix(const Graph& G) {
 }
 
 void Kruskal::spanning_tree_search() {
+    heap.init(edges, 2);
     do {
         std::pair<std::pair<size_t, size_t>, int> min_edge = heap.find_min();
         heap.delete_min();
@@ -54,6 +54,6 @@ void Kruskal::spanning_tree_search() {
             min_spanning_tree_edges.push_back(min_edge);
             S.merge(x, y);
         }
-    } while ((heap.get_size() > 0) && (min_spanning_tree_edges.size() < G.get_nodes_num()));
+    } while ((heap.get_size() > 0) && (min_spanning_tree_edges.size() < (G.get_nodes_num() - 1)));
     return;
 }

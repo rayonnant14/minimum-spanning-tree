@@ -21,15 +21,20 @@ protected:
 public:
     Heap(const vector<std::pair<std::pair<size_t, size_t>, T> >& keys_, const size_t d_);
     Heap(){};
-    void init(const vector<std::pair<std::pair<size_t, size_t>, T> >& keys_, const size_t d_);
+    void init(const vector<std::pair<std::pair<size_t, size_t>, T> > keys_, const size_t d_);
+    std::pair<std::pair<size_t, size_t>, int> operator[] (size_t i) const;
     void print_heap() const {
-        for(size_t i = 0; i < n; i++)
-            std::cout << keys[i].second << " ";
+        for(auto edge:keys)
+        {
+            std::cout << "edge (" << edge.first.first << ", " << edge.first.second
+                      << "), weight " << edge.second << std::endl;
+        }
         std::cout << std::endl;
     }
-    size_t find_min_child(size_t i) const;
-    void insert_key(std::pair<std::pair<size_t, size_t>, T> key);
-    void delete_key(size_t i);
+    size_t find_min_child(const size_t i) const;
+    void insert_key(const std::pair<std::pair<size_t, size_t>, T>& key);
+    void delete_key(const size_t i);
+    void decrease_key(const size_t i, const std::pair<std::pair<size_t, size_t>, T>& value);
     std::pair<std::pair<size_t, size_t>, T> find_min() const;
     void delete_min();
     size_t get_size() const {
@@ -38,7 +43,7 @@ public:
 };
 
 template<typename T>
-Heap<T>:: Heap(const vector<std::pair<std::pair<size_t, size_t>, T> >& keys_,
+Heap<T>::Heap(const vector<std::pair<std::pair<size_t, size_t>, T> >& keys_,
                const size_t d_) {
     keys = keys_;
     d = d_;
@@ -47,7 +52,7 @@ Heap<T>:: Heap(const vector<std::pair<std::pair<size_t, size_t>, T> >& keys_,
 }
 
 template<typename T>
-void Heap<T>::init(const vector<std::pair<std::pair<size_t, size_t>, T> >& keys_,
+void Heap<T>::init(const vector<std::pair<std::pair<size_t, size_t>, T> > keys_,
                    const size_t d_) {
     keys = keys_;
     d = d_;
@@ -75,7 +80,7 @@ void Heap<T>::emersion(size_t i) {
 }
 
 template<typename T>
-size_t Heap<T>::find_min_child(size_t i) const {
+size_t Heap<T>::find_min_child(const size_t i) const {
     size_t min_child = 0;
     size_t first = i * d + 1;
     if (first > n - 1)
@@ -108,7 +113,7 @@ void Heap<T>::diving(size_t i) {
 }
 
 template<typename T>
-void Heap<T>::insert_key(std::pair<std::pair<size_t, size_t>, T> key) {
+void Heap<T>::insert_key(const std::pair<std::pair<size_t, size_t>, T>& key) {
     keys.push_back(key);
     emersion(n);
     n += 1;
@@ -116,8 +121,8 @@ void Heap<T>::insert_key(std::pair<std::pair<size_t, size_t>, T> key) {
 }
 
 template<typename T>
-void Heap<T>::delete_key(size_t i) {
-    keys[i] = keys[n -1];
+void Heap<T>::delete_key(const size_t i) {
+    keys[i] = keys[n - 1];
     keys.resize(n - 1);
     n = n - 1;
     if ((i != 0) &&
@@ -125,6 +130,13 @@ void Heap<T>::delete_key(size_t i) {
         emersion(i);
     else
         diving(i);
+    return;
+}
+
+template<typename T>
+void Heap<T>::decrease_key(const size_t i, const std::pair<std::pair<size_t, size_t>, T>& value) {
+    keys[i] = value;
+    emersion(i);
     return;
 }
 
@@ -141,14 +153,20 @@ void Heap<T>::delete_min() {
     keys[0] = keys[n - 1];
     keys.resize(n - 1);
     n = n - 1;
-    diving(0);
+    if (n > 0)
+        diving(0);
     return;
 }
 
 template<typename T>
 void Heap<T>::make_heap() {
-    for(int i = n - 1; i >= 0; i--){
+    for (int i = n - 1; i >= 0; i--) {
         diving(i);
     }
     return;
+}
+
+template<typename T>
+std::pair<std::pair<size_t, size_t>, int> Heap<T>::operator[] (size_t i) const {
+    return keys[i];
 }
