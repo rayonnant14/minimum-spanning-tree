@@ -1,10 +1,6 @@
 //
 // Created by psmolnik on 12/10/2021.
 //
-#include <iostream>
-#include <vector>
-#include <random>
-
 template<typename T>
 class Prim {
 public:

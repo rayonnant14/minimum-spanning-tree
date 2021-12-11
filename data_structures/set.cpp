@@ -2,10 +2,8 @@
 // Created by psmolnik on 12/10/2021.
 //
 
-#include <iostream>
 #include "stdlib.h"
 #include <vector>
-
 using namespace std;
 
 class Set{

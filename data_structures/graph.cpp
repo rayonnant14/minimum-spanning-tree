@@ -4,7 +4,6 @@
 #include <iostream>
 #include <vector>
 #include <random>
-
 using namespace std;
 
 static std::random_device rd;

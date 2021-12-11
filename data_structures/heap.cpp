@@ -5,7 +5,6 @@
 #include "stdlib.h"
 #include <limits>
 #include <vector>
-
 using namespace std;
 
 template<typename T>
