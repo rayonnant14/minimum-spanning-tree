@@ -6,13 +6,14 @@
 #include <random>
 using namespace std;
 
-static std::random_device rd;
-static std::mt19937 gen(rd());
+static random_device rd;
+static mt19937 gen(rd());
+
 
 class Graph {
 public:
     Graph(const vector<vector<int> >& adj_matrix_, const size_t edges_num_);
-    Graph(const int nodes_num, const double density);
+    Graph(const int nodes_num);
     Graph(){};
     void print_graph() const;
     size_t get_nodes_num() const {
@@ -27,11 +28,12 @@ public:
     int operator()(const size_t i, const size_t j);
 
 protected:
-    void generate_random_graph(const double density);
+    void generate_random_graph();
 private:
     vector<vector<int> > adj_matrix;
     size_t nodes_num = 0;
     size_t edges_num = 0;
+    double density = 0.9;
 };
 
 Graph::Graph(const vector<vector<int> >& adj_matrix_, const size_t edges_num_) {
@@ -40,15 +42,16 @@ Graph::Graph(const vector<vector<int> >& adj_matrix_, const size_t edges_num_) {
     edges_num = edges_num_;
 }
 
-Graph::Graph(const int nodes_num_, const double density) {
+Graph::Graph(const int nodes_num_) {
     nodes_num = nodes_num_;
     adj_matrix.resize(nodes_num);
     for (size_t i = 0; i < nodes_num; i++)
         adj_matrix[i].resize(nodes_num);
-    generate_random_graph(density);
+    //density = density_;
+    generate_random_graph();
 }
 
-void Graph::generate_random_graph(const double density) {
+void Graph::generate_random_graph() {
     bernoulli_distribution pd(density);
     for (size_t i = 0; i < nodes_num; i++)
         for (size_t j = 0; j < nodes_num; j++) {

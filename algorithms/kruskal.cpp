@@ -19,7 +19,7 @@ public:
 protected:
     Graph G;
     Set S;
-    Heap<int> heap;
+    Heap<T> heap;
     std::vector<std::pair<std::pair<size_t, size_t>, T> > edges;
     void create_edges_from_adj_matrix(const Graph& G);
     std::vector<std::pair<std::pair<size_t, size_t>, T> > min_spanning_tree_edges;
