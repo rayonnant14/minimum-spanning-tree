@@ -7,8 +7,8 @@
 #include <fstream>
 
 void benchmark() {
-    std::ofstream outfile_kruskal("C:\\Users\\psmolnik\\OneDrive - Intel Corporation\\Documents\\minimum-spanning-tree\\data\\kruskal_0_9.txt");
-    std::ofstream outfile_prim("C:\\Users\\psmolnik\\OneDrive - Intel Corporation\\Documents\\minimum-spanning-tree\\data\\prim_0_9.txt");
+    std::ofstream outfile_kruskal(".\\data\\kruskal_0_9.txt");
+    std::ofstream outfile_prim(".\\data\\prim_0_9.txt");
     outfile_kruskal << "node_num microseconds" << std::endl;
     outfile_prim << "node_num microseconds" << std::endl;
     for (size_t nodes_num = 25; nodes_num <= 2000; nodes_num+=25) {
